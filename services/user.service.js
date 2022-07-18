@@ -36,7 +36,7 @@ module.exports = {
         return findRecursive((offset += 1000));
       });
     };
-    findAllRecursive(0);
+    findRecursive(0);
 
     return stream;
   },
