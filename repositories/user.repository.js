@@ -11,7 +11,7 @@ module.exports = {
     return User.findByPk(id);
   },
 
-  findAllPagination(offset, limit = 1000) {
+  findPagination(offset, limit = 1000) {
     return User.findAndCountAll({
       offset,
       limit,

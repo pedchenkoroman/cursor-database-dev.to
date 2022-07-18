@@ -1,48 +1,43 @@
-const { parseAsync, AsyncParser } = require('json2csv');
+const { PassThrough } = require('stream');
 
 const { userRepository } = require('../repositories');
 
 module.exports = {
   read(id = null) {
-    if (id) return userRepository.findByPk(id);
+    if (id) return userRepository.findByPk(id).then((user) => [user]);
 
     return userRepository.findAll();
   },
 
-  async exportToCVSFindAll() {
-    const users = await userRepository.findAll();
-    return parseAsync(users ?? []);
+  getUsersStream() {
+    const users = new PassThrough();
+    userRepository.declareCursorTable().then(async () => {
+      let res;
+      do {
+        res = await userRepository.fetchDataByCursor(1000);
+        users.write(JSON.stringify(res));
+      } while (res.length);
+      users.end();
+      await userRepository.commitTransaction();
+    });
+
+    return users;
   },
 
-  async exportToCVSPagination() {
-    const users = await this._getUsers();
-    return parseAsync(users);
-  },
+  readAllByChunk() {
+    const stream = new PassThrough();
+    const findRecursive = (offset = 0) => {
+      return userRepository.findPagination(offset).then(({ rows }) => {
+        if (!rows.length) {
+          return stream.end();
+        }
 
-  async exportToCSVCursor(writeStream) {
-    await userRepository.declareCursorTable();
-    const transformOpts = { highWaterMark: 8192 };
-    const asyncParser = new AsyncParser({}, transformOpts);
-    asyncParser.processor
-      .on('data', (chunk) => writeStream.write(chunk))
-      .on('end', () => writeStream.end());
+        stream.write(JSON.stringify(rows));
+        return findRecursive((offset += 1000));
+      });
+    };
+    findAllRecursive(0);
 
-    let res;
-    do {
-      res = await userRepository.fetchDataByCursor(1000);
-      res.forEach((item) => asyncParser.input.push(JSON.stringify(item)));
-    } while (res.length);
-    asyncParser.input.push(null);
-    await userRepository.commitTransaction();
-  },
-
-  async _getUsers(offset = 0, data = []) {
-    const results = [...data];
-    const { rows } = await userRepository.findAllPagination(offset);
-    if (!rows.length) {
-      return results;
-    }
-
-    return this._getUsers((offset += 1000), [...results, ...rows]);
+    return stream;
   },
 };

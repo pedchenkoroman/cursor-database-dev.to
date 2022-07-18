@@ -1,6 +1,7 @@
 const { Router } = require('express');
+const { userService, ParserCSVService } = require('../services');
+
 const router = Router();
-const { userService } = require('../services');
 
 router.use(function timeLog(req, res, next) {
   console.log('Time: ', Date.now());
@@ -12,26 +13,50 @@ router.get('/', async (req, res) => {
   res.send(users);
 });
 
-router.get('/findAll', async (req, res) => {
-  const csv = await userService.exportToCVSFindAll();
+router.get('/csv', async (req, res) => {
+  const users = await userService.read();
+  const csv = ParserCSVService.getParseSync({
+    fields: ['id', 'firstName', 'lastName'],
+  }).parse(users);
   res.send(csv);
   console.log('Time END: ', Date.now());
 });
 
 router.get('/pagination', async (req, res) => {
-  const csv = await userService.exportToCVSPagination();
-  res.send(csv);
+  return userService.readAllByChunk().pipe(res);
+});
+
+router.get('/pagination/csv', async (req, res) => {
+  return userService
+    .readAllByChunk()
+    .pipe(
+      ParserCSVService.getTransformParser({
+        fields: ['id', 'firstName', 'lastName'],
+      }),
+    )
+    .pipe(res);
 });
 
 router.get('/cursor', async (req, res) => {
-  await userService.exportToCSVCursor(res);
+  return userService.getUsersStream().pipe(res);
+});
+
+router.get('/cursor/csv', async (req, res) => {
+  return userService
+    .getUsersStream()
+    .pipe(
+      ParserCSVService.getTransformParser({
+        fields: ['id', 'firstName', 'lastName'],
+      }),
+    )
+    .pipe(res);
 });
 
 router.get('/:id', async (req, res) => {
   const id = Number(req.params.id);
-  const user = await userService.read(id);
-  if (!user) return res.send("User doesn't exist!!!");
-  return res.send(user);
+  const users = await userService.read(id);
+  if (!users.length) return res.send("User doesn't exist!!!");
+  return res.send(users);
 });
 
 router.use(function timeLog(req, res, next) {
