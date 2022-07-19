@@ -28,10 +28,14 @@ module.exports = {
         new Batch({ batchSize: 500 }),
       ]);
 
-      pipeline.on('data', async (data) => {
-        await queryInterface.bulkInsert('Users', data);
+      const cbs = [];
+      pipeline.on('data', (data) => {
+        cbs.push(queryInterface.bulkInsert('Users', data));
       });
-      pipeline.on('end', resolve);
+      pipeline.on('end', async () => {
+        await Promise.all(cbs);
+        resolve();
+      });
     });
   },
 
