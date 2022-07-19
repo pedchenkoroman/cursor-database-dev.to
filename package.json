@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx nodemon main.js"
+    "start": "npx nodemon main.js",
+    "start:migration": "npx sequelize-cli db:migrate",
+    "start:seed:all": "npx sequelize-cli db:seed:all"
   },
   "repository": {
     "type": "git",
@@ -25,7 +27,9 @@
     "pg": "^8.6.0",
     "pg-hstore": "^2.3.3",
     "prettier": "^2.2.1",
-    "sequelize": "^6.6.2"
+    "sequelize": "^6.6.2",
+    "stream-chain": "^2.2.5",
+    "stream-json": "^1.7.4"
   },
   "devDependencies": {
     "sequelize-cli": "^6.2.0"
