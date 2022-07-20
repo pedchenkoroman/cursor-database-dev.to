@@ -6,7 +6,7 @@ services:
     image: "library/postgres"
     #       Give the container the name my_postgres. You can changes to something else.
     container_name: "cursor-database"
-    #   Setup the username, password, and database name. You can changes these values.
+    #   Setup the username, password, and database name. You can change these values.
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=password
