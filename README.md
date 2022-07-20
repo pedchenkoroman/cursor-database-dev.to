@@ -1,8 +1,10 @@
 # A proof of concept to show differences between a cursor and offset approaches 
+The main idea is to compare how more memories and resources the node.js server uses to generate a csv file with lots of records. 
 
 ## Table of Contents
 
 - [Quick start](#install)
+- [Documentation](#documentation)
 
 
 
@@ -40,4 +42,23 @@ And to fill the table some data run the last one:
 ```
 > I use [RANDOM USER GENERATOR API](https://randomuser.me) 
 
+## Documentation
+
+First thing first I would like to say that I use [the json2csv package](https://www.npmjs.com/package/json2csv) to generate csv from json.
+
+1. The first solution that was on the top of my head to achieve a desired result is to take all records from the table
+and then to generate a csv file and send it. Let's open `routers/user.router.js` file and take a look at a callback for `/csv` path.
+First up I call the method `read` from the `user service` that returns all users, and then I call the synchronous method
+`getParseSync` pass into all users and receive csv which send to front-end. So, navigate to the link `http://localhost:3001/users/csv` and you will see just list of users.
+Nothing fancy, but if you open in the separate tab `http://localhost:3001/status` you will find a runtime metrics. The image is number 1.
+<div>
+    <figure>
+        <img src="./img/first-option-1.png" width="300" height="300" alt="metrics">
+        <figcaption>Metrics when the server is doing nothing</figcaption>
+    </figure>
+    <figure>
+        <img src="./img/first-option-2.png" width="300" height="300" alt="metrics">
+        <figcaption>Metrics of the first solution</figcaption>
+    </figure>
+</div>
 
