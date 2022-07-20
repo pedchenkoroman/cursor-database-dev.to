@@ -62,3 +62,21 @@ Nothing fancy, but if you open in the separate tab `http://localhost:3001/status
     </figure>
 </div>
 
+2. The second implementation is to use a recursive function where to use offset to take users and write them to the response stream.
+The implementation of this solution you can easily find into `routers/user.router.js` file and the callback for `/pagination/csv` path.
+<div style="width: 1000px;">
+    <figure style="width: 400px; height: 400px">
+        <img src="./img/second-option-2.png" width="250" height="250" alt="metrics">
+        <figcaption>The rest</figcaption>
+    </figure>
+</div>
+
+3. Last but not least is to use a [cursor](https://www.postgresql.org/docs/current/sql-declare.html) approach from PostgresQL.
+The implementation of this one you can easily find into `routers/user.router.js` file and the callback for `/cursor/csv` path.
+The only one difference between this one and the second one is that I open transaction then declare the cursor and then fetch data from that. 
+<div style="width: 1000px;">
+    <figure style="width: 400px; height: 400px">
+        <img src="./img/third-option-2.png" width="250" height="250" alt="metrics">
+        <figcaption>The rest</figcaption>
+    </figure>
+</div>
