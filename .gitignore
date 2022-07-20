@@ -105,3 +105,4 @@ dist
 
 postgres-data
 .idea
+config/
