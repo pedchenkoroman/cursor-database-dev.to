@@ -51,12 +51,12 @@ and then to generate a csv file and send it. Let's open `routers/user.router.js`
 First up I call the method `read` from the `user service` that returns all users, and then I call the synchronous method
 `getParseSync` pass into all users and receive csv which send to front-end. So, navigate to the link `http://localhost:3001/users/csv` and you will see just list of users.
 Nothing fancy, but if you open in the separate tab `http://localhost:3001/status` you will find a runtime metrics. The image is number 1.
-<div>
-    <figure>
+<div style="width: 1000px;">
+    <figure style="width: 400px; height: 400px">
         <img src="./img/first-option-1.png" width="300" height="300" alt="metrics">
         <figcaption>Metrics when the server is doing nothing</figcaption>
     </figure>
-    <figure>
+    <figure style="width: 400px; height: 400px">
         <img src="./img/first-option-2.png" width="300" height="300" alt="metrics">
         <figcaption>Metrics of the first solution</figcaption>
     </figure>
