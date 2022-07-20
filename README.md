@@ -1,4 +1,4 @@
-# A proof of concept to show differences between a cursor or offset approaches 
+# A proof of concept to show differences between a cursor and offset approaches 
 
 ## Table of Contents
 
