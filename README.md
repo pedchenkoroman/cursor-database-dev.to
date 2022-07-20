@@ -53,12 +53,12 @@ First up I call the method `read` from the `user service` that returns all users
 Nothing fancy, but if you open in the separate tab `http://localhost:3001/status` you will find a runtime metrics. The image is number 1.
 <div style="width: 1000px;">
     <figure style="width: 400px; height: 400px">
-        <img src="./img/first-option-1.png" width="300" height="300" alt="metrics">
-        <figcaption>Metrics when the server is doing nothing</figcaption>
+        <img src="./img/first-option-1.png" width="250" height="250" alt="metrics">
+        <figcaption>The rest</figcaption>
     </figure>
     <figure style="width: 400px; height: 400px">
-        <img src="./img/first-option-2.png" width="300" height="300" alt="metrics">
-        <figcaption>Metrics of the first solution</figcaption>
+        <img src="./img/first-option-2.png" width="250" height="250" alt="metrics">
+        <figcaption>First solution</figcaption>
     </figure>
 </div>
 
